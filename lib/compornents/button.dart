@@ -1,5 +1,5 @@
 import 'package:box_ui/box_ui.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/widgets.dart';
 
 class Button extends StatefulWidget {
   const new({super.key, required this.child});
@@ -22,20 +22,15 @@ class _ButtonState extends State<Button> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: (onHover) ? theme.accent : theme.background,
-          border: Border.all(color: theme.accent),
-        ),
-        child: InkWell(
-          onHover: (value) {
-            setState(() {
-              onHover = value;
-            });
-          },
-          child: Center(child: widget.child),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: (onHover) ? theme.accent : theme.background,
+        border: Border.all(color: theme.accent),
+      ),
+      child: MouseRegion(
+        onEnter: (event) => setState(() => onHover = true),
+        onExit: (event) => setState(() => onHover = false),
+        child: Center(child: widget.child),
       ),
     );
   }
