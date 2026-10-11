@@ -1,0 +1,106 @@
+{
+  "version": "2.21",
+  "children": [
+    {
+      "type": "rectangle",
+      "cornerRadius": 16,
+      "id": "ibXhq",
+      "x": -371,
+      "y": -618,
+      "fill": "#00000056",
+      "width": 597,
+      "height": 548
+    },
+    {
+      "type": "frame",
+      "id": "qPpCP",
+      "x": -371,
+      "y": -173,
+      "name": "Frame 1",
+      "reusable": true,
+      "width": 299,
+      "height": 103,
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "QGlDL",
+          "x": 0,
+          "y": 0,
+          "width": 299,
+          "height": 103
+        },
+        {
+          "type": "text",
+          "id": "n4lXam",
+          "x": 115,
+          "y": 39,
+          "fill": "#ffffff",
+          "textGrowth": "fixed-width-height",
+          "width": 69,
+          "height": 26,
+          "content": "HOGE",
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "id": "z2Hmsg",
+      "type": "ref",
+      "ref": "qPpCP",
+      "x": -73,
+      "y": -173
+    },
+    {
+      "type": "rectangle",
+      "cornerRadius": 16,
+      "id": "C9eOpS",
+      "x": -361,
+      "y": -523,
+      "fill": "#2b1919ff",
+      "width": 575,
+      "height": 350
+    },
+    {
+      "type": "rectangle",
+      "id": "ZsHRh",
+      "x": -371,
+      "y": -618,
+      "width": 597,
+      "height": 95
+    },
+    {
+      "type": "text",
+      "id": "bqQlb",
+      "x": -340,
+      "y": -589,
+      "fill": "#ffffff",
+      "textGrowth": "fixed-width-height",
+      "width": 168,
+      "height": 38,
+      "content": "HOGE",
+      "fontFamily": "Inter",
+      "fontSize": 32,
+      "fontWeight": "normal"
+    },
+    {
+      "type": "icon",
+      "id": "d9H0M",
+      "x": 148,
+      "y": -592,
+      "width": 47,
+      "height": 44,
+      "icon": "x",
+      "library": "lucide",
+      "fill": "#ffffff"
+    }
+  ],
+  "themes": {
+    "Theme": [
+      "Default"
+    ]
+  },
+  "fileToken": "de9e37c4-4982-42a2-90a3-26a9bd3ed095"
+}

@@ -28,8 +28,8 @@ class _ButtonState extends State<Button> {
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
-        color: (onHover) ? theme.accent : theme.background,
-        border: Border.all(color: theme.accent),
+        color: (onHover) ? boxTheme.accent : boxTheme.background,
+        border: Border.all(color: boxTheme.accent),
       ),
       child: MouseRegion(
         onEnter: (event) => setState(() => onHover = true),
@@ -37,7 +37,7 @@ class _ButtonState extends State<Button> {
         child: Center(
           child: Padding(
             padding: EdgeInsets.all(
-              (widget.height != null) ? widget.height! * 0.2 : 8,
+              (widget.height != null) ? widget.height! * 0.4 : 16,
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
