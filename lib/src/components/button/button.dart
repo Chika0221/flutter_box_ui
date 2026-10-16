@@ -2,11 +2,18 @@ import 'package:box_ui/box_ui.dart';
 import 'package:flutter/widgets.dart';
 
 class Button extends StatefulWidget {
-  const new({super.key, required this.label, this.width, this.height});
+  const new({
+    super.key,
+    required this.label,
+    this.width,
+    this.height,
+    required this.onClick,
+  });
 
   final String label;
   final double? width;
   final double? height;
+  final void Function() onClick;
 
   @override
   State<Button> createState() => _ButtonState();
@@ -28,20 +35,23 @@ class _ButtonState extends State<Button> {
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
-        color: (onHover) ? boxTheme.accent : boxTheme.background,
-        border: Border.all(color: boxTheme.accent),
+        color: (onHover) ? boxTheme.background : boxTheme.accent,
+        borderRadius: .circular(8),
       ),
-      child: MouseRegion(
-        onEnter: (event) => setState(() => onHover = true),
-        onExit: (event) => setState(() => onHover = false),
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(
-              (widget.height != null) ? widget.height! * 0.4 : 16,
-            ),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(widget.label, style: TextStyle(fontSize: 100)),
+      child: GestureDetector(
+        onTap: () => widget.onClick(),
+        child: MouseRegion(
+          onEnter: (event) => setState(() => onHover = true),
+          onExit: (event) => setState(() => onHover = false),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.all(
+                (widget.height != null) ? widget.height! * 0.4 : 16,
+              ),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(widget.label, style: TextStyle(fontSize: 100)),
+              ),
             ),
           ),
         ),

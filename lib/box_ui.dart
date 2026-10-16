@@ -1,5 +1,12 @@
 library;
 
+// テーマ
 export 'src/theme/box_theme.dart';
 
+// コンポーネント
 export 'src/components/button/button.dart';
+export 'src/components/button/icon_button.dart';
+export 'src/components/side_bar/side_bar.dart';
+
+// レイアウト
+export 'src/layouts/normal_layout.dart';
