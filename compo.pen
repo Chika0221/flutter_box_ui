@@ -9,7 +9,7 @@
       "fill": {
         "type": "image",
         "enabled": true,
-        "url": "https://fastly.picsum.photos/id/1072/600/400.jpg?hmac=djlK5vUb2VZwTofyCqTjV-D6yAVY4Q4JbeUxhDsFbhw",
+        "url": "1072-600x400.jpg",
         "mode": "cover"
       },
       "width": 1375,
@@ -46,8 +46,8 @@
     {
       "type": "frame",
       "id": "PE8pi",
-      "x": 351,
-      "y": -533,
+      "x": -28,
+      "y": -546,
       "name": "Dialog",
       "reusable": true,
       "clip": true,
