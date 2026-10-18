@@ -9,19 +9,31 @@ class IconButton extends StatelessWidget {
   final bool isFilled;
   final void Function() onClick;
 
+  String _toSvgRgb(Color color) =>
+      'rgb(${(color.r * 255).round()}, '
+      '${(color.g * 255).round()}, '
+      '${(color.b * 255).round()})';
+
   Future<String> changeIconColor() async {
     const assetPath =
         'packages/box_ui/assets/icons/right-arrow-direction-square.svg';
     var icon = await rootBundle.loadString(assetPath);
 
-    icon = icon.replaceFirst(
-      "rgb(0, 0, 0);",
-      "rgb(${boxTheme.accent.r}, ${boxTheme.accent.g}, ${boxTheme.accent.b})",
+    final fillPattern = RegExp(
+      r'''(\bfill\s*:\s*)([^;"']+)|(\bfill\s*=\s*["'])([^"']+)(["'])''',
     );
-    icon = icon.replaceFirst(
-      "rgb(0, 0, 0);",
-      "rgb(${boxTheme.fillColor.r}, ${boxTheme.fillColor.g}, ${boxTheme.fillColor.b})",
-    );
+    final colors = [boxTheme.accent, boxTheme.fillColor];
+    var colorIndex = 0;
+    icon = icon.replaceAllMapped(fillPattern, (match) {
+      if (colorIndex >= colors.length) {
+        return match[0]!;
+      }
+
+      final color = _toSvgRgb(colors[colorIndex++]);
+      return match[1] != null
+          ? '${match[1]}$color'
+          : '${match[3]}$color${match[5]}';
+    });
 
     return icon;
   }
