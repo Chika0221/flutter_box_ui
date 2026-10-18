@@ -10,3 +10,6 @@ export 'src/components/side_bar/side_bar.dart';
 
 // レイアウト
 export 'src/layouts/normal_layout.dart';
+
+// アイコン
+export 'src/icons/box_icons.dart';

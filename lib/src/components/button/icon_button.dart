@@ -4,31 +4,52 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class IconButton extends StatelessWidget {
-  const IconButton({super.key, this.isFilled = false, required this.onClick});
+  const IconButton({
+    super.key,
+    this.isFilled = false,
+    this.size = .m,
+    required this.onClick,
+    required this.icon,
+  });
 
+  final String icon;
   final bool isFilled;
+  final IconButtonSize size;
   final void Function() onClick;
 
+  String _toSvgRgb(Color color) =>
+      'rgb(${(color.r * 255).round()}, '
+      '${(color.g * 255).round()}, '
+      '${(color.b * 255).round()})';
+
   Future<String> changeIconColor() async {
-    const assetPath =
-        'packages/box_ui/assets/icons/right-arrow-direction-square.svg';
-    var icon = await rootBundle.loadString(assetPath);
+    final assetPath = icon;
+    var iconString = await rootBundle.loadString(assetPath);
 
-    icon = icon.replaceFirst(
-      "rgb(0, 0, 0);",
-      "rgb(${boxTheme.accent.r}, ${boxTheme.accent.g}, ${boxTheme.accent.b})",
+    final fillPattern = RegExp(
+      r'''(\bfill\s*:\s*)([^;"']+)|(\bfill\s*=\s*["'])([^"']+)(["'])''',
     );
-    icon = icon.replaceFirst(
-      "rgb(0, 0, 0);",
-      "rgb(${boxTheme.fillColor.r}, ${boxTheme.fillColor.g}, ${boxTheme.fillColor.b})",
-    );
+    final colors = [boxTheme.accent, boxTheme.fillColor];
+    var colorIndex = 0;
+    iconString = iconString.replaceAllMapped(fillPattern, (match) {
+      if (colorIndex >= colors.length) {
+        return match[0]!;
+      }
 
-    return icon;
+      final color = _toSvgRgb(colors[colorIndex++]);
+      return match[1] != null
+          ? '${match[1]}$color'
+          : '${match[3]}$color${match[5]}';
+    });
+
+    return iconString;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: size.value,
+      height: size.value,
       decoration: BoxDecoration(
         borderRadius: .circular(8),
         color: (isFilled) ? boxTheme.fillColor : null,
@@ -54,4 +75,14 @@ class IconButton extends StatelessWidget {
       ),
     );
   }
+}
+
+enum IconButtonSize {
+  ss(24),
+  s(32),
+  m(48),
+  l(64);
+
+  final double value;
+  const IconButtonSize(this.value);
 }
