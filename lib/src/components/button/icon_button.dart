@@ -4,9 +4,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class IconButton extends StatelessWidget {
-  const IconButton({super.key, this.isFilled = false, required this.onClick});
+  const IconButton({
+    super.key,
+    this.isFilled = false,
+    this.size = .m,
+    required this.onClick,
+  });
 
   final bool isFilled;
+  final IconButtonSize size;
   final void Function() onClick;
 
   String _toSvgRgb(Color color) =>
@@ -41,6 +47,8 @@ class IconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: size.value,
+      height: size.value,
       decoration: BoxDecoration(
         borderRadius: .circular(8),
         color: (isFilled) ? boxTheme.fillColor : null,
@@ -66,4 +74,13 @@ class IconButton extends StatelessWidget {
       ),
     );
   }
+}
+
+enum IconButtonSize {
+  s(32),
+  m(48),
+  l(64);
+
+  final double value;
+  const IconButtonSize(this.value);
 }
