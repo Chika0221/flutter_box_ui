@@ -9,8 +9,10 @@ class IconButton extends StatelessWidget {
     this.isFilled = false,
     this.size = .m,
     required this.onClick,
+    required this.icon,
   });
 
+  final String icon;
   final bool isFilled;
   final IconButtonSize size;
   final void Function() onClick;
@@ -21,16 +23,15 @@ class IconButton extends StatelessWidget {
       '${(color.b * 255).round()})';
 
   Future<String> changeIconColor() async {
-    const assetPath =
-        'packages/box_ui/assets/icons/right-arrow-direction-square.svg';
-    var icon = await rootBundle.loadString(assetPath);
+    final assetPath = icon;
+    var iconString = await rootBundle.loadString(assetPath);
 
     final fillPattern = RegExp(
       r'''(\bfill\s*:\s*)([^;"']+)|(\bfill\s*=\s*["'])([^"']+)(["'])''',
     );
     final colors = [boxTheme.accent, boxTheme.fillColor];
     var colorIndex = 0;
-    icon = icon.replaceAllMapped(fillPattern, (match) {
+    iconString = iconString.replaceAllMapped(fillPattern, (match) {
       if (colorIndex >= colors.length) {
         return match[0]!;
       }
@@ -41,7 +42,7 @@ class IconButton extends StatelessWidget {
           : '${match[3]}$color${match[5]}';
     });
 
-    return icon;
+    return iconString;
   }
 
   @override
@@ -77,6 +78,7 @@ class IconButton extends StatelessWidget {
 }
 
 enum IconButtonSize {
+  ss(24),
   s(32),
   m(48),
   l(64);
