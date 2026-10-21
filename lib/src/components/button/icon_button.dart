@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class IconButton extends StatelessWidget {
-  const IconButton({
+class BIconButton extends StatelessWidget {
+  const BIconButton({
     super.key,
     this.isFilled = false,
     this.size = .m,
@@ -14,7 +14,7 @@ class IconButton extends StatelessWidget {
 
   final String icon;
   final bool isFilled;
-  final IconButtonSize size;
+  final BIconButtonSize size;
   final void Function() onClick;
 
   String _toSvgRgb(Color color) =>
@@ -77,12 +77,12 @@ class IconButton extends StatelessWidget {
   }
 }
 
-enum IconButtonSize {
+enum BIconButtonSize {
   ss(24),
   s(32),
   m(48),
   l(64);
 
   final double value;
-  const IconButtonSize(this.value);
+  const BIconButtonSize(this.value);
 }
