@@ -33,11 +33,11 @@ class BSwitch extends StatelessWidget {
                   Align(
                     alignment: .center,
                     child: Container(
-                      height: 8 + 30 * (1 - (2 * position - 1).abs()),
+                      height: 8 + (32 - 8) * (1 - (2 * position - 1).abs()),
                       width: 32,
                       decoration: BoxDecoration(
                         borderRadius: .circular(24),
-                        color: (value) ? boxTheme.accent : boxTheme.background,
+                        color: (value) ? boxTheme.accent : boxTheme.fillColor,
                       ),
                     ),
                   ),
