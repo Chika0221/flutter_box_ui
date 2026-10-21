@@ -37,6 +37,7 @@ class BSwitch extends StatelessWidget {
                       width: 32,
                       decoration: BoxDecoration(
                         borderRadius: .circular(24),
+                        border: .all(color: boxTheme.accent),
                         color: (value) ? boxTheme.accent : boxTheme.fillColor,
                       ),
                     ),
