@@ -38,8 +38,8 @@ class BSwitch extends StatelessWidget {
                   ),
                 ),
                 AnimatedAlign(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut,
+                  duration: const Duration(milliseconds: 150),
+                  curve: Curves.decelerate,
                   alignment: value
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
