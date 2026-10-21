@@ -24,35 +24,36 @@ class BSwitch extends StatelessWidget {
           width: 64,
           child: Padding(
             padding: const EdgeInsets.all(2.0),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: .center,
-                  child: Container(
-                    height: 12,
-                    width: 48,
-                    decoration: BoxDecoration(
-                      borderRadius: .circular(24),
-                      color: boxTheme.fillColor,
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(begin: value ? 1 : 0, end: value ? 1 : 0),
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.decelerate,
+              builder: (context, position, child) => Stack(
+                children: [
+                  Align(
+                    alignment: .center,
+                    child: Container(
+                      height: 8 + 30 * (1 - (2 * position - 1).abs()),
+                      width: 32,
+                      decoration: BoxDecoration(
+                        borderRadius: .circular(24),
+                        color: (value) ? boxTheme.accent : boxTheme.background,
+                      ),
                     ),
                   ),
-                ),
-                AnimatedAlign(
-                  duration: const Duration(milliseconds: 150),
-                  curve: Curves.decelerate,
-                  alignment: value
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    height: 32,
-                    width: 32,
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                      color: boxTheme.accent,
+                  Align(
+                    alignment: Alignment(-1 + 2 * position, 0),
+                    child: Container(
+                      height: 32,
+                      width: 32,
+                      decoration: ShapeDecoration(
+                        shape: CircleBorder(),
+                        color: boxTheme.onAccent,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

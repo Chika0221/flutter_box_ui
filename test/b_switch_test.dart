@@ -25,6 +25,8 @@ void main() {
     );
 
     final thumb = find.byType(Container).last;
+    final track = find.byType(Container).first;
+    expect(tester.getSize(track).height, 12);
     final offPosition = tester.getCenter(thumb);
     final semantics = tester.ensureSemantics();
     expect(
@@ -44,9 +46,12 @@ void main() {
     expect(tester.getCenter(thumb), offPosition);
     await tester.pump(const Duration(milliseconds: 100));
     final forwardMidpoint = tester.getCenter(thumb);
+    expect(tester.getSize(track).height, greaterThan(12));
+    expect(tester.getSize(track).height, lessThanOrEqualTo(20));
     expect(forwardMidpoint.dx, greaterThan(offPosition.dx));
     await tester.pumpAndSettle();
     final onPosition = tester.getCenter(thumb);
+    expect(tester.getSize(track).height, 12);
     expect(onPosition.dx, greaterThan(forwardMidpoint.dx));
     expect(onPosition.dy, offPosition.dy);
     expect(
@@ -68,10 +73,12 @@ void main() {
     expect(tester.getCenter(thumb), onPosition);
     await tester.pump(const Duration(milliseconds: 100));
     final reverseMidpoint = tester.getCenter(thumb);
+    expect(tester.getSize(track).height, greaterThan(12));
     expect(reverseMidpoint.dx, lessThan(onPosition.dx));
     expect(reverseMidpoint.dx, greaterThan(offPosition.dx));
     await tester.pumpAndSettle();
     expect(tester.getCenter(thumb), offPosition);
+    expect(tester.getSize(track).height, 12);
     semantics.dispose();
   });
 
@@ -91,6 +98,7 @@ void main() {
 
     expect(nextValue, isTrue);
     expect(tester.widget<BSwitch>(find.byType(BSwitch)).value, isFalse);
+    expect(tester.getSize(find.byType(Container).first).height, 12);
   });
 
   testWidgets('onChangedがnullなら操作できない', (tester) async {
@@ -101,6 +109,7 @@ void main() {
       ),
     );
     final semantics = tester.ensureSemantics();
+    expect(tester.getSize(find.byType(Container).first).height, 12);
 
     await tester.tap(find.byType(BSwitch));
     await tester.pump();
