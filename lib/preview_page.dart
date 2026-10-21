@@ -1,4 +1,5 @@
 import 'package:box_ui/box_ui.dart';
+import 'package:box_ui/src/components/slider/slider.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,10 +15,7 @@ Widget mySampleText() {
   return HookBuilder(
     builder: (context) {
       final value = useState(false);
-      return BSwitch(
-        value: value.value,
-        onChanged: (nextValue) => value.value = nextValue,
-      );
+      return BSlider();
     },
   );
 }
