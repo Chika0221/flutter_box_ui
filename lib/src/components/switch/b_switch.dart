@@ -26,7 +26,7 @@ class BSwitch extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: TweenAnimationBuilder<double>(
               tween: Tween<double>(begin: value ? 1 : 0, end: value ? 1 : 0),
-              duration: const Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 160),
               curve: Curves.decelerate,
               builder: (context, position, child) => Stack(
                 children: [
