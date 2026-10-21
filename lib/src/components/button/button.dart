@@ -1,7 +1,7 @@
 import 'package:box_ui/box_ui.dart';
 import 'package:flutter/widgets.dart';
 
-class Button extends StatefulWidget {
+class BButton extends StatefulWidget {
   const new({
     super.key,
     required this.label,
@@ -16,10 +16,10 @@ class Button extends StatefulWidget {
   final void Function() onClick;
 
   @override
-  State<Button> createState() => _ButtonState();
+  State<BButton> createState() => _BButtonState();
 }
 
-class _ButtonState extends State<Button> {
+class _BButtonState extends State<BButton> {
   late bool onHover;
 
   @override
