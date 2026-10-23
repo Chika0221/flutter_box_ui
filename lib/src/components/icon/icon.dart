@@ -6,14 +6,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 class BIcon extends StatelessWidget {
   const BIcon({
     super.key,
-    this.size = .m,
+    this.size,
     required this.icon,
     this.foragoundColor,
+    this.foregroundColor,
     this.backgroundColor,
   });
 
   final String icon;
-  final BIconSize size;
+  final BIconSize? size;
+  final Color? foregroundColor;
   final Color? foragoundColor;
   final Color? backgroundColor;
 
@@ -64,12 +66,12 @@ class BIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = BoxTheme.of(context);
     return SizedBox.square(
-      dimension: size.value,
+      dimension: size?.value ?? theme.iconSize,
       child: SizedBox.square(
         dimension: 100,
         child: FutureBuilder<String>(
           future: _changeIconColor(
-            foragoundColor ?? theme.accent,
+            foregroundColor ?? foragoundColor ?? theme.accent,
             backgroundColor ?? theme.fillColor,
           ),
           builder: (context, snapshot) {
