@@ -24,3 +24,4 @@ export 'src/components/divider/divider.dart';
 export 'src/components/status_indicator/status_indicator.dart';
 export 'src/components/text_field/text_field.dart';
 export 'src/components/select/select.dart';
+export 'src/components/scroll_view/scroll_view.dart';
