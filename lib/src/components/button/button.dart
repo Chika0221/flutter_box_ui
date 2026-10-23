@@ -31,11 +31,12 @@ class _BButtonState extends State<BButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = BoxTheme.of(context);
     return Container(
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(
-        color: (onHover) ? boxTheme.background : boxTheme.accent,
+        color: (onHover) ? theme.background : theme.accent,
         borderRadius: .circular(8),
       ),
       child: GestureDetector(
