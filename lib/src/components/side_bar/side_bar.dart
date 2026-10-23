@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 class BSidebarItem {
   const BSidebarItem({required this.label, required this.icon});
@@ -12,6 +13,7 @@ class BSidebarItem {
 class SideBar extends StatefulWidget {
   const SideBar({
     super.key,
+    this.emphasis,
     this.header,
     this.body,
     this.items = const [],
@@ -19,6 +21,9 @@ class SideBar extends StatefulWidget {
     this.onSelected,
     this.initiallyExpanded = true,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final Widget? header, body;
   final List<BSidebarItem> items;
   final int selectedIndex;
@@ -31,7 +36,12 @@ class SideBar extends StatefulWidget {
 class _SideBarState extends State<SideBar> {
   late bool expanded = widget.initiallyExpanded;
   @override
-  Widget build(BuildContext context) => AnimatedContainer(
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: widget.emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) => AnimatedContainer(
     duration: const Duration(milliseconds: 160),
     width: expanded ? 200 : 56,
     child: Column(
