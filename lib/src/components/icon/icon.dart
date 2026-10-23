@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class BIcon extends StatelessWidget {
   const BIcon({
     super.key,
+    this.emphasis,
     this.size,
     required this.icon,
     this.foragoundColor,
@@ -13,6 +14,8 @@ class BIcon extends StatelessWidget {
     this.backgroundColor,
   });
 
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final String icon;
   final BIconSize? size;
   final Color? foregroundColor;
@@ -63,8 +66,13 @@ class BIcon extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final theme = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final theme = BoxTheme.emphasizedOf(context);
     return SizedBox.square(
       dimension: size?.value ?? theme.iconSize,
       child: SizedBox.square(
