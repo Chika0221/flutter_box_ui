@@ -5,9 +5,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../theme/b_emphasis.dart';
+
 class BSlider extends HookConsumerWidget {
   const BSlider({
     super.key,
+    this.emphasis,
     this.labelBuilder,
     required this.max,
     required this.min,
@@ -21,6 +24,8 @@ class BSlider extends HookConsumerWidget {
        assert(interval > 0 && interval < double.infinity),
        assert(value > double.negativeInfinity && value < double.infinity);
 
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final String Function(double value)? labelBuilder;
   final double max;
   final double min;
@@ -43,8 +48,13 @@ class BSlider extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = BoxTheme.of(context);
+  Widget build(BuildContext context, WidgetRef ref) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: HookBuilder(builder: (context) => _build(context, ref)),
+  );
+
+  Widget _build(BuildContext context, WidgetRef ref) {
+    final theme = BoxTheme.emphasizedOf(context);
     final isHorizontal = axis == BSliderAxis.horizontal;
     final divisions = ((max - min) / interval).ceil();
     final currentValue = _snap(value);
