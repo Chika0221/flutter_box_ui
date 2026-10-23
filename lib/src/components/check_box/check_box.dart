@@ -3,22 +3,32 @@ import 'package:flutter/widgets.dart';
 import '../../theme/box_theme.dart';
 import '../icon/icon.dart';
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 class BCheckBox extends StatelessWidget {
   const BCheckBox({
     super.key,
+    this.emphasis,
     required this.value,
     required this.onClick,
     this.icon,
     this.label,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final bool value;
   final ValueChanged<bool>? onClick;
   final BIcon? icon;
   final String? label;
   @override
-  Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final t = BoxTheme.emphasizedOf(context);
     return Semantics(
       checked: value,
       child: BInteraction(
