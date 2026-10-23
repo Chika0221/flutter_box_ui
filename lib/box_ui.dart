@@ -27,3 +27,4 @@ export 'src/components/select/select.dart';
 export 'src/components/scroll_view/scroll_view.dart';
 export 'src/components/tabs/tabs.dart';
 export 'src/components/list_view/list_view.dart';
+export 'src/components/dialog/dialog.dart';
