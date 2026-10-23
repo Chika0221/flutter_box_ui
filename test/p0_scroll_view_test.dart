@@ -34,4 +34,24 @@ void main() {
       controller.dispose();
     },
   );
+  testWidgets('strong scroll view colors its thumb with complementary', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      host(
+        const SizedBox(
+          height: 100,
+          child: BScrollView(
+            emphasis: BEmphasis.strong,
+            child: SizedBox(height: 1000),
+          ),
+        ),
+      ),
+    );
+    final context = tester.element(find.byType(Scrollbar));
+    expect(
+      ScrollbarTheme.of(context).thumbColor!.resolve({}),
+      BoxThemeData.fallback.complementary,
+    );
+  });
 }
