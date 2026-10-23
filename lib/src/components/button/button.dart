@@ -2,25 +2,35 @@ import 'package:flutter/widgets.dart';
 
 import '../../theme/box_theme.dart';
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 enum BButtonVariant { primary, secondary, ghost }
 
 class BButton extends StatelessWidget {
   const BButton({
     super.key,
+    this.emphasis,
     required this.label,
     this.width,
     this.height,
     this.onClick,
     this.variant = BButtonVariant.primary,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final String label;
   final double? width, height;
   final VoidCallback? onClick;
   final BButtonVariant variant;
   @override
-  Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final t = BoxTheme.emphasizedOf(context);
     return SizedBox(
       width: width,
       height: height,
@@ -45,6 +55,8 @@ class BButton extends StatelessWidget {
               style: t.body.copyWith(
                 color: variant == BButtonVariant.primary
                     ? t.onAccent
+                    : BEmphasisScope.of(context) == BEmphasis.strong
+                    ? t.accent
                     : t.foreground,
               ),
             ),
