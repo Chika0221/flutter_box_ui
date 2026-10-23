@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 
 import '../key_cap/key_cap.dart';
+import '../../theme/b_emphasis.dart';
 
 /// Coordinates and sizes use logical key units; rotation is in radians about the key center.
 class BKeyGeometry {
@@ -28,17 +29,26 @@ class BKeyGeometry {
 class BKeyboardLayout extends StatelessWidget {
   const BKeyboardLayout({
     super.key,
+    this.emphasis,
     required this.keys,
     this.selectedId,
     this.onSelected,
     this.unitSize = 64,
   }) : assert(unitSize > 0);
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final List<BKeyGeometry> keys;
   final String? selectedId;
   final ValueChanged<String>? onSelected;
   final double unitSize;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
     if (keys.isEmpty) return const SizedBox.shrink();
     double left = double.infinity,
         top = double.infinity,
