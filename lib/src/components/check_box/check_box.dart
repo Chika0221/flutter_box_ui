@@ -15,26 +15,39 @@ class BCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onClick.call(!value),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 160),
-        curve: Curves.easeInOutBack,
-        width: (value) ? 26 : 24,
-        height: (value) ? 26 : 24,
-        decoration: BoxDecoration(
-          borderRadius: .circular(8),
-          border: .all(color: boxTheme.accent),
-          color: (value) ? boxTheme.accent : boxTheme.fillColor,
+    return SizedBox.square(
+      dimension: 24,
+      child: Center(
+        child: GestureDetector(
+          onTap: () => onClick.call(!value),
+          child: TweenAnimationBuilder(
+            tween: Tween<double>(begin: (value) ? 1 : 0, end: (value) ? 1 : 0),
+            duration: Duration(milliseconds: 160),
+            curve: Curves.decelerate,
+            builder: (context, transition, child) {
+              final dip = -4 * transition * (1 - transition);
+              final size = 24 + 4 * dip;
+
+              return Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(
+                  borderRadius: .circular(8),
+                  border: .all(color: boxTheme.accent),
+                  color: (value) ? boxTheme.accent : boxTheme.fillColor,
+                ),
+                child: (value)
+                    ? (icon != null)
+                          ? icon
+                          : BIcon(
+                              icon: BoxIcons.check,
+                              foragoundColor: boxTheme.onAccent,
+                            )
+                    : null,
+              );
+            },
+          ),
         ),
-        child: (value)
-            ? (icon != null)
-                  ? icon
-                  : BIcon(
-                      icon: BoxIcons.check,
-                      foragoundColor: boxTheme.onAccent,
-                    )
-            : null,
       ),
     );
   }
