@@ -32,3 +32,4 @@ export 'src/components/table/table.dart';
 export 'src/components/key_cap/key_cap.dart';
 export 'src/components/keyboard_layout/keyboard_layout.dart';
 export 'src/components/bay_map/bay_map.dart';
+export 'src/components/keycode_picker/keycode_picker.dart';
