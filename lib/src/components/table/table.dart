@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import '../../theme/box_theme.dart';
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 class BTableColumn {
   const BTableColumn({
@@ -20,11 +21,15 @@ class BTableColumn {
 class BTable extends StatefulWidget {
   const BTable({
     super.key,
+    this.emphasis,
     required this.columns,
     required this.rows,
     this.onRowSelected,
     this.selectedRow,
   }) : assert(columns.length > 0);
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final List<BTableColumn> columns;
   final List<List<Widget>> rows;
   final ValueChanged<int>? onRowSelected;
@@ -52,8 +57,13 @@ class _BTableState extends State<BTable> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: widget.emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final t = BoxTheme.emphasizedOf(context);
     return LayoutBuilder(
       builder: (context, c) {
         assert(c.hasBoundedHeight, 'BTable requires a bounded height.');
