@@ -12,6 +12,48 @@ Finder get thumb => find
     .last;
 
 void main() {
+  testWidgets('縦向きは上へのドラッグで増加し上下端で範囲内に収まる', (tester) async {
+    var value = 0.0;
+    await tester.pumpWidget(
+      host(
+        SizedBox(
+          height: 300,
+          child: StatefulBuilder(
+            builder: (context, setState) => BSlider(
+              axis: .vertical,
+              min: 0,
+              max: 10,
+              interval: 3,
+              value: value,
+              labelBuilder: (value) => '${value.toInt()}mm',
+              onChanged: (next) => setState(() => value = next),
+            ),
+          ),
+        ),
+      ),
+    );
+    final start = tester.getCenter(thumb);
+    final gesture = await tester.startGesture(start);
+    await gesture.moveBy(const Offset(0, -20));
+    await gesture.moveBy(const Offset(0, -70));
+    await tester.pump();
+    expect(value, 3);
+    expect(find.text('3mm'), findsOneWidget);
+    expect(tester.getCenter(thumb).dy, lessThan(start.dy));
+    await gesture.moveBy(const Offset(0, -1000));
+    await tester.pump();
+    expect(value, 10);
+    final bounds = tester.getRect(find.byType(BSlider));
+    expect(tester.getRect(thumb).top, greaterThanOrEqualTo(bounds.top));
+    await gesture.moveBy(const Offset(0, 1000));
+    await tester.pump();
+    expect(value, 0);
+    expect(tester.getRect(thumb).bottom, lessThanOrEqualTo(bounds.bottom));
+    await gesture.cancel();
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(AnimatedContainer)).width, 8);
+  });
+
   testWidgets('minを起点にintervalごとの値・位置・ラベルを更新する', (tester) async {
     var value = 10.0;
     final changes = <double>[];

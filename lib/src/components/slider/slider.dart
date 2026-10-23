@@ -14,6 +14,7 @@ class BSlider extends HookConsumerWidget {
     required this.value,
     required this.interval,
     this.onChanged,
+    this.axis = .horizontal,
   }) : assert(min > double.negativeInfinity),
        assert(max < double.infinity),
        assert(max > min),
@@ -31,6 +32,9 @@ class BSlider extends HookConsumerWidget {
   /// 親で [value] を更新する。null の場合は操作できない。
   final ValueChanged<double>? onChanged;
 
+  /// 操作する軸。縦向きは下が最小、上が最大。親で有限の高さを指定する。
+  final BSliderAxis axis;
+
   double _snap(double candidate) {
     final clamped = candidate.clamp(min, max).toDouble();
     final lower = min + ((clamped - min) / interval).floor() * interval;
@@ -40,6 +44,7 @@ class BSlider extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isHorizontal = axis == BSliderAxis.horizontal;
     final divisions = ((max - min) / interval).ceil();
     final currentValue = _snap(value);
     final isDrag = useState(false);
@@ -69,10 +74,18 @@ class BSlider extends HookConsumerWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final width = constraints.maxWidth;
+        final length = isHorizontal
+            ? constraints.maxWidth
+            : constraints.maxHeight;
+        assert(
+          length.isFinite,
+          'BSlider requires a bounded size along its axis.',
+        );
+        final width = isHorizontal ? length : constraints.maxWidth;
         final actualThumbWidth = math.min(thumbWidth, width);
-        final inset = math.min(math.max(34.0, actualThumbWidth / 2), width / 2);
-        final travel = math.max(0.0, width - inset * 2);
+        final thumbExtent = isHorizontal ? actualThumbWidth : 32.0;
+        final inset = math.min(math.max(34.0, thumbExtent / 2), length / 2);
+        final travel = math.max(0.0, length - inset * 2);
         final ratio = (currentValue - min) / (max - min);
 
         void updateValue(double x) {
@@ -81,44 +94,64 @@ class BSlider extends HookConsumerWidget {
           if (nextValue != currentValue) onChanged?.call(nextValue);
         }
 
+        void startDrag(DragStartDetails details) {
+          isDrag.value = true;
+          dragPosition.value = ratio * travel;
+        }
+
+        void updateDrag(DragUpdateDetails details) {
+          final delta = (details.primaryDelta ?? 0) * (isHorizontal ? 1 : -1);
+          dragPosition.value = (dragPosition.value + delta)
+              .clamp(0.0, travel)
+              .toDouble();
+          updateValue(dragPosition.value);
+        }
+
+        void endDrag(DragEndDetails details) => isDrag.value = false;
+        void cancelDrag() => isDrag.value = false;
+
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onHorizontalDragStart: enabled
-              ? (details) {
-                  isDrag.value = true;
-                  dragPosition.value = ratio * travel;
-                }
-              : null,
-          onHorizontalDragUpdate: enabled
-              ? (details) {
-                  dragPosition.value =
-                      (dragPosition.value + (details.primaryDelta ?? 0))
-                          .clamp(0.0, travel)
-                          .toDouble();
-                  updateValue(dragPosition.value);
-                }
-              : null,
-          onHorizontalDragEnd: enabled ? (_) => isDrag.value = false : null,
-          onHorizontalDragCancel: enabled ? () => isDrag.value = false : null,
+          onHorizontalDragStart: enabled && isHorizontal ? startDrag : null,
+          onHorizontalDragUpdate: enabled && isHorizontal ? updateDrag : null,
+          onHorizontalDragEnd: enabled && isHorizontal ? endDrag : null,
+          onHorizontalDragCancel: enabled && isHorizontal ? cancelDrag : null,
+          onVerticalDragStart: enabled && !isHorizontal ? startDrag : null,
+          onVerticalDragUpdate: enabled && !isHorizontal ? updateDrag : null,
+          onVerticalDragEnd: enabled && !isHorizontal ? endDrag : null,
+          onVerticalDragCancel: enabled && !isHorizontal ? cancelDrag : null,
           child: SizedBox(
-            height: 32,
-            width: double.infinity,
+            height: isHorizontal ? 32 : double.infinity,
+            width: isHorizontal ? double.infinity : actualThumbWidth,
             child: Stack(
               children: [
                 Align(
                   alignment: .center,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isHorizontal ? 16 : 0,
+                      vertical: isHorizontal ? 0 : 16,
+                    ),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 150),
                       curve: Curves.decelerate,
-                      height: enabled && isDrag.value ? 24 : 8,
+                      height: isHorizontal
+                          ? (enabled && isDrag.value ? 24 : 8)
+                          : null,
+                      width: isHorizontal
+                          ? null
+                          : (enabled && isDrag.value ? 24 : 8),
                       decoration: ShapeDecoration(
                         shape: const StadiumBorder(),
                         color: boxTheme.accent,
                       ),
                       padding: EdgeInsets.symmetric(
-                        vertical: enabled && isDrag.value ? 8 : 4,
+                        vertical: isHorizontal
+                            ? (enabled && isDrag.value ? 8 : 4)
+                            : 0,
+                        horizontal: isHorizontal
+                            ? 0
+                            : (enabled && isDrag.value ? 8 : 4),
                       ),
                       child: Stack(
                         children: List.generate(divisions + 1, (index) {
@@ -126,16 +159,19 @@ class BSlider extends HookConsumerWidget {
                             min + index * interval,
                             max,
                           );
+                          final position =
+                              inset -
+                              16 +
+                              (tickValue - min) / (max - min) * travel -
+                              2;
                           return Positioned(
-                            left:
-                                inset -
-                                16 +
-                                (tickValue - min) / (max - min) * travel -
-                                2,
-                            top: 0,
-                            bottom: 0,
+                            left: isHorizontal ? position : 0,
+                            right: isHorizontal ? null : 0,
+                            top: isHorizontal ? 0 : null,
+                            bottom: isHorizontal ? 0 : position,
                             child: Container(
-                              width: 4,
+                              width: isHorizontal ? 4 : null,
+                              height: isHorizontal ? null : 4,
                               decoration: ShapeDecoration(
                                 shape: const StadiumBorder(),
                                 color: boxTheme.background,
@@ -148,7 +184,10 @@ class BSlider extends HookConsumerWidget {
                   ),
                 ),
                 Positioned(
-                  left: inset + ratio * travel - actualThumbWidth / 2,
+                  left: isHorizontal
+                      ? inset + ratio * travel - actualThumbWidth / 2
+                      : 0,
+                  bottom: isHorizontal ? null : inset + ratio * travel - 16,
                   child: Container(
                     height: 32,
                     width: actualThumbWidth,
@@ -182,3 +221,5 @@ class BSlider extends HookConsumerWidget {
     );
   }
 }
+
+enum BSliderAxis { horizontal, vertical }
