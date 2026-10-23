@@ -1,6 +1,6 @@
 # box_ui PCアプリ向けコンポーネント一覧
 
-2026-10-12 時点
+2026-10-23 更新
 
 ## 対象アプリ
 
@@ -16,7 +16,7 @@ box_ui は「モジュール拡張型自作キーボード（コードネーム:
 
 コンパニオンアプリを box_ui で組むには、43個のコンポーネントが要る。そのうち P0 の20個がそろえば、①ホーム・③キーマップ・割り当て表まで作れる。
 
-現状は Button が実装済み（ホバー対応）、Box はファイルだけある状態。配置先は `lib/src/components/<name>/<name>.dart` で、公開するときは `lib/box_ui.dart` に export を足す。
+P0 の20種は実装済み。P1 の Switch と P2 の Slider も既存実装がある。配置先は `lib/src/components/<name>/<name>.dart` で、公開するときは `lib/box_ui.dart` に export を足す。
 
 優先度の意味:
 
@@ -30,7 +30,7 @@ box_ui は「モジュール拡張型自作キーボード（コードネーム:
 
 | 優先度 | コンポーネント | 役割 | 使う画面 | PCで要るもの |
 | --- | --- | --- | --- | --- |
-| P0 | Button | 主要アクション | 全画面（再試行・適用・インポートなど） | ホバー・押下・無効・フォーカスリング、primary / secondary / ghost の種類（実装済み、ホバーのみ） |
+| P0 | Button | 主要アクション | 全画面（再試行・適用・インポートなど） | ホバー・押下・無効・フォーカスリング、primary / secondary / ghost の種類（実装済み） |
 | P0 | IconButton | 小さい操作 | ③レイヤーの複製・リセット、④編集・削除 | Tooltip との組み合わせ、正方形のヒット領域 |
 | P0 | TextField | 1行の文字入力 | ②プロファイル名、④コマンド | プレースホルダー、エラー表示、Tab での移動、Enter で確定 |
 | P0 | Checkbox | オンオフ | ⑤表示項目の選択、⑥設定 | ラベルクリックで切り替え、Space キー |
@@ -50,7 +50,7 @@ box_ui は「モジュール拡張型自作キーボード（コードネーム:
 
 | 優先度 | コンポーネント | 役割 | 使う画面 | PCで要るもの |
 | --- | --- | --- | --- | --- |
-| P0 | Box | 枠・背景・余白を持つ土台で、他の部品のベースになる | 全画面 | theme の fillColor / borderColor を使う（ファイルはあるが中身は空） |
+| P0 | Box | 枠・背景・余白を持つ土台で、他の部品のベースになる | 全画面 | theme の fillColor / borderColor を使う（実装済み） |
 | P0 | Divider | 区切り線 | 全画面 | 縦と横の両方 |
 | P0 | ScrollView | スクロール領域 | 一覧系の画面全部 | 常に見えるスクロールバー、ホイール操作 |
 | P0 | Sidebar (NavigationRail) | 画面の切り替え | メインウィンドウ（6項目） | 折りたたみ、選択中の表示、ホバー |
@@ -132,8 +132,27 @@ box_ui は「モジュール拡張型自作キーボード（コードネーム:
 
 ## 未決事項
 
-- [ ] KeyboardLayout が受け取るデータの形（vial.json の解釈はアプリ側に置く想定）
+- [x] KeyboardLayout のデータは BKeyGeometry で受け取る（vial.json の解釈はアプリ側）
 - [ ] キーマップの書き込みタイミング（即時か「適用」ボタンか。仕様書の未決13）。「適用」ボタン方式なら KeyCap の未適用状態が要る
 - [ ] OLED 画面を独立させるか（仕様書の未決12）。独立させへんなら OledPreview はモジュール詳細に入る
 - [ ] material_ui を依存に入れとるけど、どこまで使うか（Widgets だけで組むか）
 - [ ] デザインファイル（DESIGN.md や .pen）をいつ用意するか
+
+## P0 実装の利用方法
+
+`package:box_ui/box_ui.dart` から公開 API を利用できる。既存の命名に合わせて `BButton`、`BTextField`、`BSelect<T>`、`BBox`、`BTable` などの `B` 接頭辞を使う。Sidebar は従来の `SideBar` を維持した。
+
+- 色は `BoxThemeData` の accent / background / fillColor / borderColor / foreground / onAccent を使う。角丸は 8px、基本の余白は 4px 単位。見出し 20px、本文 14px、キャプション 12px、等幅文字をテーマに追加した。`BIcon` は `iconSize` を標準サイズにし、明示した `BIconSize` を優先する。
+- `BButton` は primary / secondary / ghost に対応。操作コールバックが null なら無効。`BCheckBox.onClick` は従来名を維持し、任意の `label` も同じクリック領域に含める。
+- 入力、Select、Dialog、Tooltip は Flutter の Material 標準機構を利用する。アプリのルートに `MaterialApp` を用意し、その配下で `BoxTheme` を適用する。追加パッケージへの依存はない。標準コントロールには内部で BoxTheme の配色を適用する。
+- `BTextField` は controller / focusNode / placeholder / errorText / onSubmitted を受け取る。`BSelect<T>` は `BSelectOption<T>` のリストと、現在値・変更コールバックを受け取る。
+- `BDialog.show(context, dialog: ...)` は標準のモーダルルートを使い、Tab のフォーカスを閉じ込め、Esc で閉じる。`onConfirm` は Enter の処理に使う。テキスト入力内の Enter は `onSubmitted` に同じ確定処理を渡す。内部のボタンにフォーカスした Enter はそのボタンを実行する。
+- `BScrollView` は自身で ScrollController を管理し、常時表示のスクロールバーを付ける。外部 controller も指定でき、その場合の dispose は呼び出し側が担当する。
+- `SideBar` は items / selectedIndex / onSelected で制御し、折りたたみは内部で管理する。従来の header / body も利用できる。
+- `BTabs` は選択状態を親で管理する。フォーカスがタブ内にある間、左右キー、Ctrl+Tab / Ctrl+Shift+Tab、1〜9 キーで切り替える。`BListView` は上下キーでフォーカスを移動し、Enter / Space で選択する。
+- `BTable`、`BListView`、`BKeycodePicker` は親から有限の高さを与える。`BTable` は縦方向のヘッダー固定、横スクロール、ヘッダー右端のドラッグによる列幅変更に対応。行データは Widget の配列で、通信や割り当てモデルは持たない。
+- `BKeyGeometry` の x / y / width / height はキー単位、rotation はキー中心を軸にしたラジアン。負の座標と回転後の外接領域も含めて `BKeyboardLayout` が表示サイズを計算する。ファームウェアの配列定義の解釈は呼び出し側が担当する。
+- `BKeyCap` は selected / pending / readOnly を受け取り、pending は色と記号の両方で表示する。`BKeycodePicker` は `BKeycode` のカテゴリを選び、コード・名前を検索し、上下キーと Enter で選択できる。カテゴリとキーコードの一覧はアプリ側から渡す。
+- `BBayMap` は `Map<BBay, String>` を受け取り、未指定のベイは空きとして表示する。
+
+P0 の実装とテストは `codex/p0-<コンポーネント名>` ごとのブランチに分けている。共通基盤は `codex/p0-foundation`。依存する実装と公開 API を各段階で利用できるよう、ブランチは順に積んでいる。
