@@ -21,3 +21,4 @@ export 'src/icons/box_icons.dart';
 export 'src/components/box/box.dart';
 export 'src/components/text/text.dart';
 export 'src/components/divider/divider.dart';
+export 'src/components/status_indicator/status_indicator.dart';
