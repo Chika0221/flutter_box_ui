@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import '../text_field/text_field.dart';
 import '../tabs/tabs.dart';
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 class BKeycode {
   const BKeycode({
@@ -18,9 +19,13 @@ class BKeycode {
 class BKeycodePicker extends StatefulWidget {
   const BKeycodePicker({
     super.key,
+    this.emphasis,
     required this.keycodes,
     required this.onSelected,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final List<BKeycode> keycodes;
   final ValueChanged<BKeycode> onSelected;
   @override
@@ -40,7 +45,12 @@ class _BKeycodePickerState extends State<BKeycodePicker> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: widget.emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
     final categories = widget.keycodes.map((k) => k.category).toSet().toList();
     if (category >= categories.length) category = 0;
     final items = widget.keycodes
