@@ -2,19 +2,29 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 class BTabs extends StatelessWidget {
   const BTabs({
     super.key,
+    this.emphasis,
     required this.labels,
     required this.selectedIndex,
     required this.onSelected,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final List<String> labels;
   final int selectedIndex;
   final ValueChanged<int> onSelected;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
     void move(int delta) {
       if (labels.isNotEmpty) {
         onSelected((selectedIndex + delta) % labels.length);
