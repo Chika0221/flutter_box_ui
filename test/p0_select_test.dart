@@ -29,4 +29,23 @@ void main() {
     await tester.pumpAndSettle();
     expect(selected, 'b');
   });
+  testWidgets('strong select applies complementary to its Material theme', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      host(
+        BSelect<String>(
+          emphasis: BEmphasis.strong,
+          options: const [BSelectOption(value: 'a', label: 'Alpha')],
+          onChanged: (_) {},
+        ),
+      ),
+    );
+    expect(
+      Theme.of(tester.element(find.byType(DropdownButton<String>)))
+          .colorScheme
+          .primary,
+      BoxThemeData.fallback.complementary,
+    );
+  });
 }
