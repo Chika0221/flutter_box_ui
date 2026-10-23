@@ -2,15 +2,29 @@ import 'package:flutter/widgets.dart';
 
 import '../box/box.dart';
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 enum BBay { frontLeft, frontRight, outerLeft, outerRight }
 
 class BBayMap extends StatelessWidget {
-  const BBayMap({super.key, this.modules = const {}, this.onSelected});
+  const BBayMap({
+    super.key,
+    this.emphasis,
+    this.modules = const {},
+    this.onSelected,
+  });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final Map<BBay, String> modules;
   final ValueChanged<BBay>? onSelected;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
     Widget bay(BBay b, String label) => Expanded(
       child: BInteraction(
         onActivate: onSelected == null ? null : () => onSelected!(b),
