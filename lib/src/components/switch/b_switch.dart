@@ -1,15 +1,29 @@
 import 'package:box_ui/src/theme/box_theme.dart';
 import 'package:flutter/widgets.dart';
 
-class BSwitch extends StatelessWidget {
-  const BSwitch({super.key, required this.value, required this.onChanged});
+import '../../theme/b_emphasis.dart';
 
+class BSwitch extends StatelessWidget {
+  const BSwitch({
+    super.key,
+    this.emphasis,
+    required this.value,
+    required this.onChanged,
+  });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final bool value;
   final ValueChanged<bool>? onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final theme = BoxTheme.emphasizedOf(context);
     void toggle() => onChanged?.call(!value);
 
     return Semantics(
