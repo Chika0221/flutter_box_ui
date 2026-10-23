@@ -156,3 +156,37 @@ P0 の20種は実装済み。P1 の Switch と P2 の Slider も既存実装が�
 - `BBayMap` は `Map<BBay, String>` を受け取り、未指定のベイは空きとして表示する。
 
 P0 の実装とテストは `codex/p0-<コンポーネント名>` ごとのブランチに分けている。共通基盤は `codex/p0-foundation`。依存する実装と公開 API を各段階で利用できるよう、ブランチは順に積んでいる。
+
+### 補色による強調
+
+全コンポーネントに任意の `emphasis` 引数を追加した。
+
+```dart
+BButton(
+  label: '適用',
+  emphasis: BEmphasis.strong,
+  onClick: apply,
+)
+
+BEmphasisScope(
+  emphasis: BEmphasis.strong,
+  child: Column(
+    children: [
+      BText('注目してほしい操作'),
+      BButton(label: '実行', onClick: execute),
+      BButton(
+        label: '戻る',
+        emphasis: BEmphasis.normal,
+        onClick: back,
+      ),
+    ],
+  ),
+)
+```
+
+- `BEmphasis.normal` は従来の accent 配色、`BEmphasis.strong` は complementary 配色。`emphasis` が未指定（null）なら直近の `BEmphasisScope` を継承し、スコープもなければ normal になる。明示した normal は外側の strong を解除する。
+- Button の primary / secondary / ghost や、選択・無効状態とは独立して指定できる。strong では主要色だけでなく、その色から派生する面色・枠色・フォーカスリングと、塗りの上の白黒文字も合わせて切り替わる。BText は補色の文字表示、BIcon は補色の標準色、ScrollView は補色のスクロールバーになる。
+- BIcon の foregroundColor / foragoundColor / backgroundColor など、明示した色は強調指定より優先する。任意の Widget を受け取る場所では、独自に指定した色まで上書きしない。
+- エラー・警告・成功の状態色は、strong にしても変わらない。StatusIndicator の状態色や KeyCap の pending 表示は意味を維持する。
+- スコープは子コンポーネントへ継承され、Dialog の別ルートへも引き継ぐ。strong を重ねても補色が元の accent に戻ることはない。テーマの差し替えにも追従する。
+- `BoxTheme.of(context)` は常に元のテーマを返す。独自コンポーネントで強調を反映したい場合は `BoxTheme.emphasizedOf(context)` を使う。強調用の派生値は `BoxThemeData.emphasized` からも取得できる。
