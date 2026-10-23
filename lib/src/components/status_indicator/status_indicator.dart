@@ -1,20 +1,30 @@
 import 'package:flutter/widgets.dart';
 
 import '../../theme/box_theme.dart';
+import '../../theme/b_emphasis.dart';
 
 enum BStatus { success, warning, error, disconnected }
 
 class BStatusIndicator extends StatelessWidget {
   const BStatusIndicator({
     super.key,
+    this.emphasis,
     required this.status,
     required this.label,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final BStatus status;
   final String label;
   @override
-  Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final t = BoxTheme.emphasizedOf(context);
     final (symbol, color) = switch (status) {
       BStatus.success => ('✓', t.success),
       BStatus.warning => ('!', t.warning),
