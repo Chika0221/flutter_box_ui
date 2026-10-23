@@ -22,10 +22,7 @@ class BIcon extends StatelessWidget {
       '${(color.g * 255).round()}, '
       '${(color.b * 255).round()})';
 
-  Future<String> changeIconColor() async {
-    final fColor = foragoundColor ?? boxTheme.accent;
-    final bColor = backgroundColor ?? boxTheme.fillColor;
-
+  Future<String> _changeIconColor(Color fColor, Color bColor) async {
     final assetPath = icon;
     var iconString = await rootBundle.loadString(assetPath);
 
@@ -65,12 +62,16 @@ class BIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = BoxTheme.of(context);
     return SizedBox.square(
       dimension: size.value,
       child: SizedBox.square(
         dimension: 100,
         child: FutureBuilder<String>(
-          future: changeIconColor(),
+          future: _changeIconColor(
+            foragoundColor ?? theme.accent,
+            backgroundColor ?? theme.fillColor,
+          ),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const SizedBox.shrink();

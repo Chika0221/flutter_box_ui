@@ -9,6 +9,7 @@ class BSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = BoxTheme.of(context);
     void toggle() => onChanged?.call(!value);
 
     return Semantics(
@@ -37,8 +38,8 @@ class BSwitch extends StatelessWidget {
                       width: 32,
                       decoration: BoxDecoration(
                         borderRadius: .circular(24),
-                        border: .all(color: boxTheme.accent),
-                        color: (value) ? boxTheme.accent : boxTheme.fillColor,
+                        border: .all(color: theme.accent),
+                        color: (value) ? theme.accent : theme.fillColor,
                       ),
                     ),
                   ),
@@ -49,7 +50,7 @@ class BSwitch extends StatelessWidget {
                       width: 32,
                       decoration: ShapeDecoration(
                         shape: CircleBorder(),
-                        color: boxTheme.onAccent,
+                        color: theme.onAccent,
                       ),
                     ),
                   ),

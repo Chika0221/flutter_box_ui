@@ -44,6 +44,7 @@ class BSlider extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = BoxTheme.of(context);
     final isHorizontal = axis == BSliderAxis.horizontal;
     final divisions = ((max - min) / interval).ceil();
     final currentValue = _snap(value);
@@ -57,7 +58,7 @@ class BSlider extends HookConsumerWidget {
             (index) => labelBuilder!(math.min(min + index * interval, max)),
           );
     final textStyle = DefaultTextStyle.of(context).style
-        .merge(boxTheme.secondaryTextStyle);
+        .merge(theme.secondaryTextStyle);
     var thumbWidth = 32.0;
     if (labels != null) {
       final painter = TextPainter(
@@ -143,7 +144,7 @@ class BSlider extends HookConsumerWidget {
                           : (enabled && isDrag.value ? 24 : 8),
                       decoration: ShapeDecoration(
                         shape: const StadiumBorder(),
-                        color: boxTheme.accent,
+                        color: theme.accent,
                       ),
                       padding: EdgeInsets.symmetric(
                         vertical: isHorizontal
@@ -174,7 +175,7 @@ class BSlider extends HookConsumerWidget {
                               height: isHorizontal ? null : 4,
                               decoration: ShapeDecoration(
                                 shape: const StadiumBorder(),
-                                color: boxTheme.background,
+                                color: theme.background,
                               ),
                             ),
                           );
@@ -195,7 +196,7 @@ class BSlider extends HookConsumerWidget {
                       shape: labelBuilder != null
                           ? const StadiumBorder()
                           : const CircleBorder(),
-                      color: boxTheme.onAccent,
+                      color: theme.onAccent,
                     ),
                     padding: const EdgeInsets.symmetric(
                       vertical: 4,
@@ -206,7 +207,7 @@ class BSlider extends HookConsumerWidget {
                         : Center(
                             child: Text(
                               labelBuilder!(currentValue),
-                              style: boxTheme.secondaryTextStyle,
+                              style: theme.secondaryTextStyle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),

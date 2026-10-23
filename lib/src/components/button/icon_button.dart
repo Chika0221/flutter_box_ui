@@ -15,12 +15,13 @@ class BIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = BoxTheme.of(context);
     return GestureDetector(
       onTap: () => onClick(),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: .circular(8),
-          color: (isFilled) ? boxTheme.fillColor : null,
+          color: (isFilled) ? theme.fillColor : null,
         ),
         child: icon,
       ),

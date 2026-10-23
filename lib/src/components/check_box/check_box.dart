@@ -15,6 +15,7 @@ class BCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = BoxTheme.of(context);
     return SizedBox.square(
       dimension: 24,
       child: Center(
@@ -33,15 +34,15 @@ class BCheckBox extends StatelessWidget {
                 height: size,
                 decoration: BoxDecoration(
                   borderRadius: .circular(8),
-                  border: .all(color: boxTheme.accent),
-                  color: (value) ? boxTheme.accent : boxTheme.fillColor,
+                  border: .all(color: theme.accent),
+                  color: (value) ? theme.accent : theme.fillColor,
                 ),
                 child: (value)
                     ? (icon != null)
                           ? icon
                           : BIcon(
                               icon: BoxIcons.check,
-                              foragoundColor: boxTheme.onAccent,
+                              foragoundColor: theme.onAccent,
                             )
                     : null,
               );
