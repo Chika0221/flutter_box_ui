@@ -1,57 +1,51 @@
-import 'package:box_ui/box_ui.dart';
 import 'package:flutter/widgets.dart';
 
-class BButton extends StatefulWidget {
-  const new({
+import '../../theme/box_theme.dart';
+import '../interaction/interaction.dart';
+
+enum BButtonVariant { primary, secondary, ghost }
+
+class BButton extends StatelessWidget {
+  const BButton({
     super.key,
     required this.label,
     this.width,
     this.height,
-    required this.onClick,
+    this.onClick,
+    this.variant = BButtonVariant.primary,
   });
-
   final String label;
-  final double? width;
-  final double? height;
-  final void Function() onClick;
-
-  @override
-  State<BButton> createState() => _BButtonState();
-}
-
-class _BButtonState extends State<BButton> {
-  late bool onHover;
-
-  @override
-  void initState() {
-    super.initState();
-
-    onHover = false;
-  }
-
+  final double? width, height;
+  final VoidCallback? onClick;
+  final BButtonVariant variant;
   @override
   Widget build(BuildContext context) {
-    final theme = BoxTheme.of(context);
-    return Container(
-      width: widget.width,
-      height: widget.height,
-      decoration: BoxDecoration(
-        color: (onHover) ? theme.background : theme.accent,
-        borderRadius: .circular(8),
-      ),
-      child: GestureDetector(
-        onTap: () => widget.onClick(),
-        child: MouseRegion(
-          onEnter: (event) => setState(() => onHover = true),
-          onExit: (event) => setState(() => onHover = false),
+    final t = BoxTheme.of(context);
+    return SizedBox(
+      width: width,
+      height: height,
+      child: BInteraction(
+        onActivate: onClick,
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 28),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: variant == BButtonVariant.primary
+                ? t.accent
+                : variant == BButtonVariant.secondary
+                ? t.fillColor
+                : null,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Center(
-            child: Padding(
-              padding: EdgeInsets.all(
-                (widget.height != null) ? widget.height! * 0.4 : 16,
-              ),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(widget.label, style: TextStyle(fontSize: 100)),
+            widthFactor: 1,
+            heightFactor: 1,
+            child: Text(
+              label,
+              style: t.body.copyWith(
+                color: variant == BButtonVariant.primary
+                    ? t.onAccent
+                    : t.foreground,
               ),
             ),
           ),
