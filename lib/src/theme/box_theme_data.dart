@@ -3,6 +3,18 @@ import 'package:flutter/widgets.dart';
 /// Immutable colors and typography shared by box_ui components.
 @immutable
 class BoxThemeData {
+  static const double radius = 8;
+  static const double controlHeight = 32;
+  static const double spacing = 4;
+  Color get success => const Color(0xFF228B54);
+  Color get warning => const Color(0xFFAD7100);
+  Color get error => const Color(0xFFC63737);
+  TextStyle get heading =>
+      primaryTextStyle.copyWith(fontSize: 20, fontWeight: FontWeight.w600);
+  TextStyle get body => secondaryTextStyle.copyWith(fontSize: 14);
+  TextStyle get caption => secondaryTextStyle.copyWith(fontSize: 12);
+  TextStyle get monospace => body.copyWith(fontFamily: 'monospace');
+  final double iconSize;
   final Color accent;
   final Color background;
   final String? primaryFontFamily;
@@ -17,6 +29,7 @@ class BoxThemeData {
   late final TextStyle secondaryTextStyle;
 
   BoxThemeData({
+    this.iconSize = 48,
     required this.accent,
     required this.background,
     this.primaryFontFamily,
@@ -34,11 +47,13 @@ class BoxThemeData {
 
   /// Pass null explicitly to clear a font family.
   BoxThemeData copyWith({
+    double? iconSize,
     Color? accent,
     Color? background,
     String? Function()? primaryFontFamily,
     String? Function()? secondaryFontFamily,
   }) => BoxThemeData(
+    iconSize: iconSize ?? this.iconSize,
     accent: accent ?? this.accent,
     background: background ?? this.background,
     primaryFontFamily: primaryFontFamily == null
