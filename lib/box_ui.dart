@@ -18,3 +18,4 @@ export 'src/layouts/normal_layout.dart';
 
 // アイコン
 export 'src/icons/box_icons.dart';
+export 'src/components/box/box.dart';
