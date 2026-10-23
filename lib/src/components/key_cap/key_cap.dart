@@ -2,10 +2,12 @@ import 'package:flutter/widgets.dart';
 
 import '../../theme/box_theme.dart';
 import '../interaction/interaction.dart';
+import '../../theme/b_emphasis.dart';
 
 class BKeyCap extends StatelessWidget {
   const BKeyCap({
     super.key,
+    this.emphasis,
     required this.label,
     this.description,
     this.selected = false,
@@ -13,13 +15,21 @@ class BKeyCap extends StatelessWidget {
     this.readOnly = false,
     this.onClick,
   });
+
+  /// Inherits the enclosing scope when null; strong uses complementary colors.
+  final BEmphasis? emphasis;
   final String label;
   final String? description;
   final bool selected, pending, readOnly;
   final VoidCallback? onClick;
   @override
-  Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+  Widget build(BuildContext context) => BEmphasisScope(
+    emphasis: emphasis ?? BEmphasisScope.of(context),
+    child: Builder(builder: _build),
+  );
+
+  Widget _build(BuildContext context) {
+    final t = BoxTheme.emphasizedOf(context);
     return Semantics(
       label: pending ? '$label, unapplied' : label,
       child: BInteraction(
