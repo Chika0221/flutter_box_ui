@@ -29,3 +29,4 @@ export 'src/components/tabs/tabs.dart';
 export 'src/components/list_view/list_view.dart';
 export 'src/components/dialog/dialog.dart';
 export 'src/components/table/table.dart';
+export 'src/components/key_cap/key_cap.dart';
