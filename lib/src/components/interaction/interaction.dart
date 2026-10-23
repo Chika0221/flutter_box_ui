@@ -24,7 +24,7 @@ class _BInteractionState extends State<BInteraction> {
   bool hover = false, focus = false, pressed = false;
   @override
   Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+    final t = BoxTheme.emphasizedOf(context);
     final enabled = widget.onActivate != null;
     return Semantics(
       button: true,

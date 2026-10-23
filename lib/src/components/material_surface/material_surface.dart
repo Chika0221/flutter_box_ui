@@ -10,7 +10,7 @@ class BMaterialSurface extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    final t = BoxTheme.of(context);
+    final t = BoxTheme.emphasizedOf(context);
     return Theme(
       data: ThemeData(
         useMaterial3: true,

@@ -20,6 +20,10 @@ class BoxThemeData {
   final String? primaryFontFamily;
   final String? secondaryFontFamily;
 
+  /// Palette used for extra prominence. Computed lazily, preserving typography
+  /// and deriving readable text, fills and borders from the complementary color.
+  late final BoxThemeData emphasized = copyWith(accent: complementary);
+
   late final Color complementary;
   late final Color fillColor;
   late final Color borderColor;

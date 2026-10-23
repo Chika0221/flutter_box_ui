@@ -2,6 +2,7 @@ library;
 
 // テーマ
 export 'src/theme/box_theme.dart';
+export 'src/theme/b_emphasis.dart';
 export 'src/theme/box_theme_data.dart';
 
 // コンポーネント
