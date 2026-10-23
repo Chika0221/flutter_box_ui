@@ -21,4 +21,18 @@ void main() {
     expect(submitted, 'Profile');
     expect(find.text('Required'), findsOneWidget);
   });
+  testWidgets('strong field applies complementary to Material primary color', (
+    tester,
+  ) async {
+    await tester.pumpWidget(host(const BTextField(emphasis: BEmphasis.strong)));
+    final context = tester.element(find.byType(TextField));
+    expect(
+      Theme.of(context).colorScheme.primary,
+      BoxThemeData.fallback.complementary,
+    );
+    expect(
+      Theme.of(context).inputDecorationTheme.fillColor,
+      BoxThemeData.fallback.emphasized.fillColor,
+    );
+  });
 }
