@@ -11,4 +11,27 @@ void main() {
     );
     expect(tester.widget<Text>(find.text('Heading')).style!.fontSize, 20);
   });
+  testWidgets(
+    'strong text uses complementary while default text keeps foreground',
+    (tester) async {
+      await tester.pumpWidget(
+        host(
+          const Column(
+            children: [
+              BText('Strong', emphasis: BEmphasis.strong),
+              BText('Normal'),
+            ],
+          ),
+        ),
+      );
+      expect(
+        tester.widget<Text>(find.text('Strong')).style!.color,
+        BoxThemeData.fallback.complementary,
+      );
+      expect(
+        tester.widget<Text>(find.text('Normal')).style!.color,
+        BoxThemeData.fallback.foreground,
+      );
+    },
+  );
 }
