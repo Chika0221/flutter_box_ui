@@ -36,18 +36,38 @@ class BCheckBox extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 24,
-              height: 24,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: value ? t.accent : t.fillColor,
-                border: Border.all(color: t.accent),
-                borderRadius: BorderRadius.circular(8),
+            SizedBox.square(
+              dimension: 24,
+              child: TweenAnimationBuilder(
+                duration: Duration(milliseconds: 160),
+                curve: Curves.decelerate,
+                tween: Tween<double>(
+                  begin: (value) ? 1 : 0,
+                  end: (value) ? 1 : 0,
+                ),
+                builder: (context, transition, child) {
+                  final dip = -4 * transition * (1 - transition);
+                  final size = 24 + 4 * dip;
+
+                  return Container(
+                    width: size,
+                    height: size,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: value ? t.accent : t.fillColor,
+                      border: Border.all(color: t.accent),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: value
+                        ? icon ??
+                              Text(
+                                '✓',
+                                style: t.body.copyWith(color: t.onAccent),
+                              )
+                        : null,
+                  );
+                },
               ),
-              child: value
-                  ? icon ?? Text('✓', style: t.body.copyWith(color: t.onAccent))
-                  : null,
             ),
             if (label != null) ...[
               const SizedBox(width: 8),
