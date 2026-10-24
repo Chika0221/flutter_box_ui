@@ -1,9 +1,15 @@
 import 'package:box_ui/box_ui.dart';
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget host(Widget child) => MaterialApp(home: Scaffold(body: child));
+Widget host(Widget child) => WidgetsApp(
+  color: const Color(0xFFFFFFFF),
+  pageRouteBuilder: <T>(settings, builder) => PageRouteBuilder<T>(
+    settings: settings,
+    pageBuilder: (context, _, _) => builder(context),
+  ),
+  home: Align(alignment: Alignment.topLeft, child: child),
+);
 void main() {
   testWidgets(
     'scroll view owns a visible scrollbar and supports wheel scrolling',
@@ -21,7 +27,7 @@ void main() {
         ),
       );
       expect(
-        tester.widget<Scrollbar>(find.byType(Scrollbar)).thumbVisibility,
+        tester.widget<RawScrollbar>(find.byType(RawScrollbar)).thumbVisibility,
         true,
       );
       await tester.drag(
@@ -48,9 +54,8 @@ void main() {
         ),
       ),
     );
-    final context = tester.element(find.byType(Scrollbar));
     expect(
-      ScrollbarTheme.of(context).thumbColor!.resolve({}),
+      tester.widget<RawScrollbar>(find.byType(RawScrollbar)).thumbColor,
       BoxThemeData.fallback.complementary,
     );
   });

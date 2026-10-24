@@ -1,9 +1,6 @@
+import 'package:flutter/widgets.dart';
+
 import '../../theme/box_theme.dart';
-
-// Flutter's compatibility export keeps this package usable without a new dependency.
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart';
-
 import '../../theme/b_emphasis.dart';
 
 class BScrollView extends StatefulWidget {
@@ -40,7 +37,8 @@ class _BScrollViewState extends State<BScrollView> {
 
   Widget _build(BuildContext context) {
     final c = widget.controller ?? _controller;
-    final scrollbar = Scrollbar(
+    return RawScrollbar(
+      thumbColor: BoxTheme.emphasizedOf(context).accent,
       controller: c,
       thumbVisibility: true,
       child: SingleChildScrollView(
@@ -49,15 +47,5 @@ class _BScrollViewState extends State<BScrollView> {
         child: widget.child,
       ),
     );
-    return BEmphasisScope.of(context) == BEmphasis.strong
-        ? ScrollbarTheme(
-            data: ScrollbarThemeData(
-              thumbColor: WidgetStatePropertyAll(
-                BoxTheme.emphasizedOf(context).accent,
-              ),
-            ),
-            child: scrollbar,
-          )
-        : scrollbar;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:box_ui/box_ui.dart';
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,9 +7,10 @@ void main() {
   testWidgets('Ctrl+Tab and digits select tabs', (tester) async {
     var selected = 0;
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: StatefulBuilder(
+      WidgetsApp(
+        color: const Color(0xFFFFFFFF),
+        onGenerateRoute: (_) => PageRouteBuilder<void>(
+          pageBuilder: (_, _, _) => StatefulBuilder(
             builder: (context, setState) => BTabs(
               labels: const ['One', 'Two'],
               selectedIndex: selected,
