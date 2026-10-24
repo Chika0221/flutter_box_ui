@@ -140,6 +140,7 @@ class BSelect<T> extends StatelessWidget {
                               border: Border.all(color: t.borderColor),
                               borderRadius: BorderRadius.circular(8),
                             ),
+                            padding: EdgeInsets.all(4),
                             child: ListView(
                               controller: scroll,
                               itemExtent: 40,
@@ -147,13 +148,20 @@ class BSelect<T> extends StatelessWidget {
                               padding: EdgeInsets.zero,
                               children: [
                                 for (var i = 0; i < options.length; i++)
-                                  BInteraction(
-                                    selected: i == index,
-                                    onActivate: () =>
-                                        Navigator.pop(routeContext, options[i]),
-                                    child: Text(
-                                      options[i].label,
-                                      style: t.body,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 4,
+                                    ),
+                                    child: BInteraction(
+                                      selected: i == index,
+                                      onActivate: () => Navigator.pop(
+                                        routeContext,
+                                        options[i],
+                                      ),
+                                      child: Text(
+                                        options[i].label,
+                                        style: t.body,
+                                      ),
                                     ),
                                   ),
                               ],
