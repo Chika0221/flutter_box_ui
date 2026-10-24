@@ -1,5 +1,3 @@
-// ignore: deprecated_member_use
-import 'package:flutter/material.dart' show Scrollbar;
 import 'package:flutter/widgets.dart';
 
 import '../../theme/box_theme.dart';
@@ -67,7 +65,8 @@ class _BTableState extends State<BTable> {
     return LayoutBuilder(
       builder: (context, c) {
         assert(c.hasBoundedHeight, 'BTable requires a bounded height.');
-        return Scrollbar(
+        return RawScrollbar(
+          thumbColor: t.accent,
           controller: horizontal,
           thumbVisibility: true,
           notificationPredicate: (n) => n.metrics.axis == Axis.horizontal,
@@ -121,7 +120,8 @@ class _BTableState extends State<BTable> {
                     ),
                   ),
                   Expanded(
-                    child: Scrollbar(
+                    child: RawScrollbar(
+                      thumbColor: t.accent,
                       controller: vertical,
                       thumbVisibility: true,
                       child: ListView.builder(
